@@ -1,7 +1,7 @@
-package gb.ru.demo.controller;
+package ru.gb.controller;
 
-import gb.ru.demo.model.Product;
-import gb.ru.demo.service.ProductService;
+import ru.gb.entity.Product;
+import ru.gb.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 @Controller
@@ -41,7 +42,7 @@ public class ProductController {
 
     @GetMapping("/addProduct")
     public String addProduct(@RequestParam(name = "title") String title,
-                             @RequestParam(name = "cost") double cost) {
+                             @RequestParam(name = "cost") BigDecimal cost) {
         Product product = new Product(title, cost);
         productService.save(product);
         return "redirect:" + "/product";

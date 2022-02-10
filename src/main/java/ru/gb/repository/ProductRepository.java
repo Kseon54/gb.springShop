@@ -1,6 +1,6 @@
-package gb.ru.demo.repository;
+package ru.gb.repository;
 
-import gb.ru.demo.model.Product;
+import ru.gb.entity.Product;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -10,15 +10,15 @@ import java.util.stream.Collectors;
 
 @Component
 public class ProductRepository {
-    private final List<Product> products;
+    private final List<Product> products = new ArrayList<>();
     private long iterator = 1;
 
-    public ProductRepository() {
-        this.products = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            products.add(new Product(iterator++, String.format("Product%d", i), Math.round(Math.random() * 1000)));
-        }
-    }
+//    public ProductRepository() {
+//        this.products = new ArrayList<>();
+//        for (int i = 1; i <= 5; i++) {
+//            products.add(new Product(iterator++, String.format("Product%d", i), new BigDecimal(Math.round(Math.random() * 1000))));
+//        }
+//    }
 
     public Optional<Product> findById(long id) {
         List<Product> collect = products.stream().filter(p -> p.getId() == id).limit(1).collect(Collectors.toList());

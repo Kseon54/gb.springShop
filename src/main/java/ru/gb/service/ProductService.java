@@ -1,7 +1,7 @@
-package gb.ru.demo.service;
+package ru.gb.service;
 
-import gb.ru.demo.model.Product;
-import gb.ru.demo.repository.ProductRepository;
+import ru.gb.entity.Product;
+import ru.gb.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
