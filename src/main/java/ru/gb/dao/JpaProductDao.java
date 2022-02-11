@@ -50,8 +50,9 @@ public class JpaProductDao implements ProductDao {
     }
 
     @Override
+    @Deprecated
     public void update(Product product) {
-
+        save(product);
     }
 
     @Override

@@ -1,14 +1,13 @@
 package ru.gb.repository;
 
 import ru.gb.entity.Product;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+//@Component
 public class ProductRepository {
     private final List<Product> products = new ArrayList<>();
     private long iterator = 1;
@@ -64,7 +63,7 @@ public class ProductRepository {
     public Optional<Product> delete(Product product) {
         if (findById(product.getId()).isPresent())
             for (int i = 0; i < products.size(); i++) {
-                if (products.get(i).getId() == product.getId()) {
+                if (products.get(i).getId().equals(product.getId())) {
                     return Optional.of(products.remove(i));
                 }
             }

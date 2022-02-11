@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 
 @Entity
-@Table
+@Table(name = "Product")
 
 @NamedQueries({
         @NamedQuery(name = "Product.findById",
@@ -33,9 +33,11 @@ public class Product {
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
-    public Product(String title, BigDecimal cost) {
+    public Product(String title, BigDecimal cost,Manufacturer manufacturer) {
         this.title = title;
         this.cost = cost;
+        this.manufacturer = manufacturer;
+        date = LocalDate.now();
     }
 
     public String getInfo() {

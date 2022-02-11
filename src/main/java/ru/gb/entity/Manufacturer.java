@@ -13,7 +13,7 @@ import java.util.Set;
 @Builder
 @ToString
 @Entity
-@Table
+@Table(name = "Manufacturer")
 @NamedQueries({
         @NamedQuery(name = "Manufacturer.findById",
                 query = "select m from Manufacturer m where m.id = :id"),

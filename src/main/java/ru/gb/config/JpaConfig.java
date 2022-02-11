@@ -2,7 +2,6 @@ package ru.gb.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -20,7 +19,6 @@ import java.sql.Driver;
 import java.util.Properties;
 
 @Configuration
-@ComponentScan("ru.gb")
 @EnableTransactionManagement
 @PropertySource("classpath:jdbc.properties")
 public class JpaConfig {
@@ -28,8 +26,8 @@ public class JpaConfig {
     private String driverClassName;
     @Value("${url}")
     private String url;
-    @Value("${username}")
-    private String username;
+    @Value("geek")
+    private String login;
     @Value("${password}")
     private String password;
 
@@ -41,7 +39,7 @@ public class JpaConfig {
             Class<? extends Driver> driver = (Class<? extends Driver>) Class.forName(driverClassName);
             dataSource.setDriverClass(driver);
             dataSource.setUrl(url);
-            dataSource.setUsername(username);
+            dataSource.setUsername(login);
             dataSource.setPassword(password);
             return dataSource;
         } catch (ClassNotFoundException e) {
