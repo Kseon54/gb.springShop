@@ -2,32 +2,36 @@ package ru.gb.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gb.dao.JpaManufacturerDao;
+import ru.gb.dao.ManufacturerDao;
 import ru.gb.entity.Manufacturer;
+import ru.gb.exception.NotFoundException;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ManufacturerService {
 
-    private final JpaManufacturerDao jpaManufacturerDao;
+    private final ManufacturerDao manufacturerDao;
 
     public Manufacturer findById(long id) {
-        return jpaManufacturerDao.findById(id);
+        Optional<Manufacturer> manufacturer = manufacturerDao.findById(id);
+        return manufacturer.orElseThrow(NotFoundException::new);
     }
 
     public Iterable<Manufacturer> findAll() {
-        return jpaManufacturerDao.findAll();
+        return manufacturerDao.findAll();
     }
 
     public Manufacturer save(Manufacturer manufacturer) {
-        return jpaManufacturerDao.save(manufacturer);
+        return manufacturerDao.save(manufacturer);
     }
 
     public void update(Manufacturer manufacturer) {
-        jpaManufacturerDao.update(manufacturer);
+        manufacturerDao.save(manufacturer);
     }
 
     public void delete(Long id) {
-        jpaManufacturerDao.deleteById(id);
+        manufacturerDao.deleteById(id);
     }
 }

@@ -2,28 +2,32 @@ package ru.gb.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.gb.dao.JpaProductDao;
+import ru.gb.dao.ProductDao;
 import ru.gb.entity.Product;
+import ru.gb.exception.NotFoundException;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final JpaProductDao productRepository;
+    private final ProductDao productDao;
 
     public Product findById(long id) {
-        return productRepository.findById(id);
+        Optional<Product> manufacturer = productDao.findById(id);
+        return manufacturer.orElseThrow(NotFoundException::new);
     }
 
     public Iterable<Product> findAll() {
-        return productRepository.findAll();
+        return productDao.findAll();
     }
 
     public Product save(Product product) {
-        return productRepository.save(product);
+        return productDao.save(product);
     }
 
     public void delete(Long id) {
-        productRepository.deleteById(id);
+        productDao.deleteById(id);
     }
 }
