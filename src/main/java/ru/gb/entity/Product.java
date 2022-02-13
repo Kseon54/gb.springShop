@@ -1,6 +1,12 @@
 package ru.gb.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ru.gb.entity.enums.Status;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,17 +17,9 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 @Entity
-@Table
-
-@NamedQueries({
-        @NamedQuery(name = "Product.findById",
-                query = "select m from Product m where m.id = :id"),
-        @NamedQuery(name = "Product.findNameById",
-                query = "select m.title from Product m where m.id = :id")
-})
-public class Product {
+@EntityListeners(AuditingEntityListener.class)
+public class Product extends BaseEntity<Product> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,20 +31,39 @@ public class Product {
     @JoinColumn(name = "manufacturer_id")
     private Manufacturer manufacturer;
 
-    public Product(String title, BigDecimal cost) {
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Version
+    @Column(name = "VERSION")
+    private int version;
+    @CreatedBy
+    @Column(name = "CREATED_BY", updatable = false)
+    private String createdBy;
+    @CreatedDate
+    @Column(name = "CREATED_DATE")
+    private LocalDate createdDate;
+    @LastModifiedBy
+    @Column(name = "LAST_MODIFIED_BY")
+    private String lastModifiedBy;
+    @LastModifiedDate
+    @Column(name = "LAST_MODIFIED_DATE")
+    private LocalDate lastModifiedDate;
+
+    public Product(String title, BigDecimal cost, Manufacturer manufacturer) {
         this.title = title;
         this.cost = cost;
+        this.manufacturer = manufacturer;
+        date = LocalDate.now();
     }
 
-    public String getInfo() {
-        return String.format("id: %d\t%s\tcost: %.2f", id, title, cost);
-    }
-
-    public Product copy() {
+    @Override
+    public Product clone() {
         return Product.builder()
                 .id(getId())
                 .title(getTitle())
                 .cost(getCost())
+                .date(date)
                 .build();
     }
 
@@ -59,5 +76,13 @@ public class Product {
                 ", date=" + date +
                 ", manufacturer=" + manufacturer.getName() +
                 '}';
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

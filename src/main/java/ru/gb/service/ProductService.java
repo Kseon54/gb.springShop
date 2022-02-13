@@ -1,36 +1,19 @@
 package ru.gb.service;
 
-import ru.gb.entity.Product;
-import ru.gb.repository.ProductRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.NoSuchElementException;
+import ru.gb.dao.ProductDao;
+import ru.gb.entity.Product;
 
 @Service
-@RequiredArgsConstructor
-public class ProductService {
+public class ProductService extends BaseService<Product> {
 
-    private final ProductRepository productRepository;
+    private final ProductDao productDao;
 
-    public Product findById(long id) {
-        return productRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    @Autowired
+    public ProductService(ProductDao productDao) {
+        super(productDao);
+        this.productDao = productDao;
     }
 
-    public ArrayList<Product> findAll() {
-        return productRepository.findAll();
-    }
-
-    public Product save(Product product) {
-        return productRepository.save(product).orElseThrow(IllegalArgumentException::new);
-    }
-
-    public Product update(long id, Product product) {
-        return productRepository.update(id, product).orElseThrow(NoSuchElementException::new);
-    }
-
-    public Product delete(Product product) {
-        return productRepository.delete(product).orElseThrow(NoSuchElementException::new);
-    }
 }
