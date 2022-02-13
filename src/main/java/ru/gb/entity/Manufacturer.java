@@ -1,9 +1,15 @@
 package ru.gb.entity;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import ru.gb.entity.enums.Status;
 
 import javax.persistence.*;
-import java.util.HashSet;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Setter
@@ -13,29 +19,40 @@ import java.util.Set;
 @Builder
 @ToString
 @Entity
-@Table(name = "Manufacturer")
-@NamedQueries({
-        @NamedQuery(name = "Manufacturer.findById",
-                query = "select m from Manufacturer m where m.id = :id"),
-        @NamedQuery(name = "Manufacturer.findNameById",
-                query = "select m.name from Manufacturer m where m.id = :id")
-})
-public class Manufacturer {
+@EntityListeners(AuditingEntityListener.class)
+public class Manufacturer extends BaseEntity<Manufacturer> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Version
+    @Column(name = "VERSION")
+    private int version;
+    @CreatedBy
+    @Column(name = "CREATED_BY", updatable = false)
+    private String createdBy;
+    @CreatedDate
+    @Column(name = "CREATED_DATE")
+    private LocalDate createdDate;
+    @LastModifiedBy
+    @Column(name = "LAST_MODIFIED_BY", updatable = false)
+    private String lastModifiedBy;
+    @LastModifiedDate
+    @Column(name = "LAST_MODIFIED_DATE")
+    private LocalDate lastModifiedDate;
+
     @OneToMany(mappedBy = "manufacturer", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<Product> products;
 
-    public boolean addProduct(Product product) {
-        if (products == null) {
-            products = new HashSet<>();
-        }
-        return products.add(product);
+    @Override
+    public Manufacturer clone() {
+        return Manufacturer.builder()
+                .id(id)
+                .name(name)
+                .build();
     }
-
-
-
 }

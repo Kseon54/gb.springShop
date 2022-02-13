@@ -3,6 +3,11 @@
 <html>
 <head>
     <title>Products</title>
+    <style>
+        table {
+            border-spacing: 7px 11px; /* Расстояние между ячейками */
+        }
+    </style>
 </head>
 <body>
 <a href="<c:url value="/product/add"/>">Add product</a>
@@ -11,6 +16,8 @@
         <th>Id</th>
         <th>Title</th>
         <th>Cost</th>
+        <th>Manufacturer</th>
+        <th>Date add</th>
     </tr>
 
     <%--@elvariable id="products" type="java.util.List"--%>
@@ -19,15 +26,21 @@
             <td><c:out value="${product.id}"/></td>
             <td><c:out value="${product.title}"/></td>
             <td><c:out value="${product.cost}"/></td>
+            <td><c:out value="${product.manufacturer.name}"/></td>
+            <td><c:out value="${product.date}"/></td>
             <td>
-                <form action="<c:url value="/product/${product.id}/updateForm"/>">
-                    <input type="submit" value="Update"/>
-                </form>
+                    <input type="submit" value="Update"
+                           onclick="location.href = '<c:url value="/product/${product.id}/updateForm"/>';"/>
             </td>
             <td>
-                <form action="<c:url value="/product/${product.id}/delete"/>">
-                    <input type="submit" value="Delete"/>
-                </form>
+                <c:if test="${'ACTIVE' == product.status}">
+                    <input type="submit" value="Disable"
+                           onclick="location.href = '<c:url value="/product/${product.id}/disable"/>';"/>
+                </c:if>
+                <c:if test="${'DISABLE' == product.status}">
+                    <input type="submit" value="Active"
+                           onclick="location.href = '<c:url value="/product/${product.id}/active"/>';"/>
+                </c:if>
             </td>
         </tr>
     </c:forEach>
